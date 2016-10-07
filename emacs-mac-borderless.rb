@@ -3,14 +3,14 @@ class EmacsMacBorderless < Formula
 
   # head "http://www.math.s.chiba-u.ac.jp/~mituharu/emacs-mac.git"
   # url "http://www.math.s.chiba-u.ac.jp/~mituharu/emacs-mac.git", :revision => "emacs-24.4.91-mac-5.5"
-  url "https://github.com/Gwydir8/emacs-mac-borderless.git", :branch => "master"
-  version "emacs-24.5-mac-5.7"
+  url "https://github.com/rfsfrn/emacs-mac-borderless.git", :branch => "master"
+  version "emacs-25.1-mac-6.0"
 
 
   conflicts_with 'emacs-mac', :because => 'both install `emacs` binaries'
 
-  depends_on :autoconf => :build
-  depends_on :automake => :build
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
   depends_on "pkg-config" => :build
 
   option "with-dbus", "Build with d-bus support"
