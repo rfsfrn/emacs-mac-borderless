@@ -1,13 +1,13 @@
 /* Definitions and headers for communication on the Mac OS.
    Copyright (C) 2000-2008 Free Software Foundation, Inc.
-   Copyright (C) 2009-2015  YAMAMOTO Mitsuharu
+   Copyright (C) 2009-2016  YAMAMOTO Mitsuharu
 
 This file is part of GNU Emacs Mac port.
 
 GNU Emacs Mac port is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
 
 GNU Emacs Mac port is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,19 +31,15 @@ typedef Lisp_Object XrmDatabase;
 #undef free
 #undef malloc
 #undef realloc
+#ifdef INFINITY
+#define INFINITY_DEFINED 1
+#endif
 /* Macros max and min defined in lisp.h conflict with those in
    precompiled header Carbon.h.  */
 #undef max
 #undef min
 #define __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES 0
 #include <Carbon/Carbon.h>
-#ifdef check /* __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES is
-		not in effect.  */
-#undef check
-#undef verify
-#undef _GL_VERIFY_H
-#include <verify.h>
-#endif
 #undef free
 #define free unexec_free
 #undef malloc
@@ -54,15 +50,19 @@ typedef Lisp_Object XrmDatabase;
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #undef max
 #define max(a, b) ((a) > (b) ? (a) : (b))
+#ifndef INFINITY_DEFINED
 #undef INFINITY
+#endif
 #undef Z
 #define Z (current_buffer->text->z)
 #undef ALIGN
 
-#ifndef CGFLOAT_DEFINED
-typedef float CGFloat;
-#define CGFLOAT_MIN FLT_MIN
-#define CGFLOAT_MAX FLT_MAX
+#ifndef CF_NOESCAPE
+#if __has_attribute (noescape)
+#define CF_NOESCAPE __attribute__ ((noescape))
+#else
+#define CF_NOESCAPE
+#endif
 #endif
 
 typedef void *Window;
@@ -95,10 +95,8 @@ typedef CGGlyph XChar2b;
   ((*(chp)) & 0x00ff)
 
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1060
 #ifndef DRAWING_USE_GCD
 #define DRAWING_USE_GCD 1
-#endif
 #endif
 
 /* Emulate X GC's by keeping color info in a structure.  */
@@ -158,7 +156,7 @@ typedef struct _XGC
 #define YNegative 	0x0020
 
 typedef struct {
-    	long flags;	/* marks which fields in this structure are defined */
+	long flags;	/* marks which fields in this structure are defined */
 #if 0
 	int x, y;		/* obsolete for new window mgrs, but clients */
 	int width, height;	/* should set so old wm's don't mess up */
@@ -167,7 +165,7 @@ typedef struct {
 #if 0
 	int max_width, max_height;
 #endif
-    	int width_inc, height_inc;
+	int width_inc, height_inc;
 #if 0
 	struct {
 		int x;	/* numerator */

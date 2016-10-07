@@ -1,4 +1,265 @@
+* emacs-25.1-mac-6.0 (2016-09-18)
+
+** Fixed bugs
+
+*** Several glitches in frame tabbing on macOS 10.12.
+To address this issue in a simple and consistent way, we now round the
+frame size according to the character size only on resize by mouse
+dragging or changes of the `fullscreen' frame parameter.  This may
+cause some incompatibility.
+
+*** Fullscreen frames contain space at the top on OS X 10.10.
+
+** Improvements
+
+*** New variable `mac-frame-tabbing' specifying tabbing behavior of a
+frame that is becoming visible on macOS 10.12.
+
+*** C-x 5 5 ... behaves like the C-x 5 prefix, but temporarily changes
+tabbing behavior if "5" is typed repeatedly on macOS 10.12.
+
+
+* emacs-25.1-rc2-mac-5.91 (2016-08-22)
+
+** Improvements
+
+*** Update emoji sequence data to version 4.0 draft.
+
+
+* emacs-25.1-rc1-mac-5.90 (2016-07-25)
+Based on Emacs 25.1 release candidate.
+Drop support for Mac OS X 10.4 and 10.5.
+Official git repository is https://bitbucket.org/mituharu/emacs-mac.git
+http://lists.gnu.org/archive/html/emacs-devel/2016-07/msg01087.html
+
+** Fixed bugs
+
+*** Crash when closing a fullscreen frame on macOS 10.12 Beta.
+
+*** Can't resize a frame by dragging its edge on macOS 10.12 Beta.
+
+*** Cyrillic text composition in HELLO file is shown wrong with Menlo.
+
+** Improvements
+
+*** New functions `mac-export-frames', `mac-page-setup-dialog',
+`mac-get-page-setup', and `mac-print-frames-dialog'.  They correspond
+to x-* functions provided in the cairo build together with GTK+.
+
+
+* emacs-24.5-mac-5.18 (2016-06-26)
+http://lists.gnu.org/archive/html/emacs-devel/2016-06/msg00601.html
+
+** Fixed bugs
+
+*** On OS X 10.11, the result of Typometer is much worse than that on
+the NS port, although better than the both ports on OS X 10.10.  This
+is because the Mac port manually defers and coalesces screen flushes
+in order to work around slow flyspell.  This seems to be unnecessary
+on OS X 10.11, and actually gives a reverse effect as above.
+
+** Improvements
+
+*** Emoji data is updated to Unicode 9.0.
+
+
+* emacs-24.5-mac-5.17 (2016-04-30)
+http://lists.gnu.org/archive/html/emacs-devel/2016-04/msg00890.html
+
+** Fixed bugs
+
+*** Shrunken image size on a Retina display is wrong if it is created
+from the raw data using genuine ImageMagick.
+Reported by Sean Farley.
+
+** Improvements
+
+*** When you create an image from the raw data as opposed to a file,
+you can now provide 2x data for high-resolution environments via the
+`:data-2x' property.  It can be specified either as a property of the
+image descriptor or as a text property of the first character of the
+standard resolution data (if it is given as a string).
+
+
+* emacs-24.5-mac-5.16 (2016-04-23)
+http://lists.gnu.org/archive/html/emacs-devel/2016-04/msg00648.html
+
+** Fixed bugs
+
+*** M-x tool-bar-mode RET for a fullheight/maximized frame fails on
+its first invocation.
+
+*** Wrong size calculations for 2x genuine imagemagick images.  For
+example, (image-size (create-image "splash.png" 'imagemagick nil
+:max-height 300)) is larger than the one without the :max-height
+property if the frame is on a Retina display.
+
+** Improvements
+
+*** For frames on a Retina display, image-io/imagemagick image
+descriptors involving non-integral transformations such as shrinking
+or rotation are now processed with 2x pixel buffer even if the source
+image file/data is for 1x.  For example, (insert-image (create-image
+"gnus/gnus.png" 'imagemagick nil :max-height 100)) now looks crisper.
+
+*** Org mode LaTeX fragments preview may also create 2x images.
+
+
+* emacs-24.5-mac-5.15 (2015-12-13)
+http://lists.gnu.org/archive/html/emacs-devel/2015-12/msg00543.html
+
+** Fixed bugs
+
+*** Pure space overflow on 32-bit build.
+
+*** Can't invoke from Finder if user's login shell is fish.
+This is a regression introduced in 5.12.
+
+*** Changing default font causes display corruption in some cases.
+Reported by Leo.
+
+
+* emacs-24.5-mac-5.14 (2015-12-09)
+http://lists.gnu.org/archive/html/emacs-devel/2015-12/msg00334.html
+
+** Fixed bugs
+
+*** mac-auto-operator-composition-mode breaks syntax highlighting.
+Reported by James Reeves.
+
+*** Hang when canceling pop-up dictionary with C-g on OS X 10.11.
+Reported by Max Siegel.
+
+** Improvements
+
+*** Force clicking with a pressure-sensitive trackpad now pops up a
+Quick Look window to look up the word under the pointer in the
+dictionaries.
+Note: This is currently hard-coded.  Also, unlike Command-Control-D or
+three-finger tap, it is not easy or often impossible to specify the
+region of the text you look up because down-mouse-1 event resets it.
+
+
+* emacs-24.5-mac-5.13 (2015-10-31)
+http://lists.gnu.org/archive/html/emacs-devel/2015-10/msg02522.html
+
+** Fixed bugs
+
+*** Closing a fullscreen frame may cause crash or Lisp error in
+frame-live-p.
+
+** Improvements
+
+*** Fullboth frames are no longer eligible to become fullscreen via
+Mission Control on OS X 10.11 (this change is actually made in 5.12).
+
+
+* emacs-24.5-mac-5.12 (2015-10-30)
+http://lists.gnu.org/archive/html/emacs-devel/2015-10/msg02465.html
+
+** Fixed bugs
+
+*** Invoking Ediff from a fullscreen frame creates a fullscreen
+Control Panel on OS X 10.11 (does not happen on OS X 10.11.1).
+
+*** Changing a frame to/from fullboth does not make the frame key
+window on OS X 10.11.
+
+*** Making a fullboth frame fullscreen does not keep the tool bar
+visibility on OS X 10.7 and later.
+
+*** If the executable is built on an older OS/SDK and run on OS X
+10.11, the frame placed in the left part of Split View gets maximized.
+Reported by Alan Schmitt.
+
+*** Crash when making a frame fullscreen/fullboth on Mac OS X 10.4.
+
+*** Crash by infinite recursion while displaying box face.
+Apply a fix for Bug#21428.
+
+*** Crash when redisplaying a window changes faces or fonts.
+Apply a fix for Bug#21428.
+
+** Improvements
+
+*** Fullscreen/fullboth frames no longer hide the Dock unnecessarily
+if compiled and run on OS X 10.11.
+
+*** Fullscreen transition animation looks a bit better on OS X 10.11.
+
+
+* emacs-24.5-mac-5.11 (2015-09-27)
+http://lists.gnu.org/archive/html/emacs-devel/2015-09/msg01020.html
+
+** Fixed bugs
+
+*** Crash when closing a fullscreen frame on OS X 10.11 GM Candidate.
+
+*** Daemon mode does not exec after fork at startup.  This is a
+regression introduced in 3.90.
+
+*** Display corrupts when zooming twice quickly.
+
+*** Crash when displaying etc/HELLO file on OS X 10.11 GM Candidate.
+It crashes when displaying Oriya characters with Arial Unicode MS.
+This happens even with TextEdit.app if you explicitly select the font.
+A workaround is added so Oriya Sangam MN is preferred by default.
+
+** Improvements
+
+*** Extend mode line areas while showing resize transition animation.
+
+
+* emacs-24.5-mac-5.10 (2015-08-25)
+http://lists.gnu.org/archive/html/emacs-devel/2015-08/msg00882.html
+
+** Fixed bugs
+
+*** Crash when pressing Command + power button on OS X 10.9 and later.
+
+** Improvements
+
+*** Accept localized font family names on Mac OS X 10.6 and later.
+
+*** Some resize operations on OS X 10.7 and later now involve
+transition animations by decomposing and distributing the current
+contents.  Examples include dragging with shift/option key pressed,
+zooming, and dragging full screen tiling border on OS X 10.11 Beta.
+
+*** New global minor mode `mac-auto-operator-composition-mode'.  If
+enabled, it composes consecutive ASCII symbolic characters into a
+special glyph when the font supports such a composition typically via
+ligatures for operators in programming languages.  Tested with Hasklig
+and Fira Code.
+
+
+* emacs-24.5-mac-5.9 (2015-07-13)
+http://lists.gnu.org/archive/html/emacs-devel/2015-07/msg00151.html
+
+** Fixed bugs
+
+*** Progress indicator is shown while tracking popup menu.
+
+*** Command-H followed by clicking the dock icon may create a new
+frame on OS X 10.10.
+
+*** Cancel/OK buttons in font dialog look fat on OS X 10.10.
+
+*** Several full screen glitches on OS X 10.11 Beta.
+Custom transition animation is disabled to work around some problems
+including crash.
+
+*** Visible bell not visible on OS X 10.11 Beta.
+
+** Improvements
+
+*** New function `mac-application-state' to obtain the current status
+as a GUI application.
+
+
+
 * emacs-24.5-mac-5.8 (2015-05-17)
+http://lists.gnu.org/archive/html/emacs-devel/2015-05/msg00476.html
 
 ** Fixed bugs
 
@@ -1564,7 +1825,7 @@ http://lists.gnu.org/archive/html/emacs-devel/2009-06/msg00532.html
 
 *** Assertion failure in mac_set_font.
 
-*** "Hide" in Login Items does not work. 
+*** "Hide" in Login Items does not work.
 
 *** (mac-pasteboard-string-to-string "\342\204\246" 'mac-roman) gives
 GREEK CAPITAL LETTER OMEGA instead of OHM SIGN (likewise for

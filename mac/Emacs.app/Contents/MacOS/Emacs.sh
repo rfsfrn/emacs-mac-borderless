@@ -1,7 +1,7 @@
 #!/bin/bash
 ### Emacs.sh - GNU Emacs Mac port startup script.
 
-## Copyright (C) 2012-2015  YAMAMOTO Mitsuharu
+## Copyright (C) 2012-2016  YAMAMOTO Mitsuharu
 
 ## This file is part of GNU Emacs Mac port.
 
@@ -43,9 +43,12 @@ case ${SHLVL} in
     *) exec "$@" ;;
 esac
 
-case $(basename "${SHELL}") in
+case ${SHELL##*/} in
     bash)	exec -l "${SHELL}" --login -c 'exec "$@"' - "$@" ;;
     ksh|sh|zsh)	exec -l "${SHELL}" -c 'exec "$@"' - "$@" ;;
     csh|tcsh)	exec -l "${SHELL}" -c 'exec $argv:q' "$@" ;;
-    *)		exec "$@" ;;
+    es|rc)	exec -l "${SHELL}" -l -c 'exec $*' "$@" ;;
 esac
+
+# Fall back on bash.
+exec -l /bin/bash --login -c 'exec "$@"' - "$@"
